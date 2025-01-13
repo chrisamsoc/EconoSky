@@ -20,11 +20,10 @@ public class City {
     public City(String oName)
     {
         //setting input name from param to name 
-      
         this.name = oName;
         this.neighbor = new HashMap();
         
-        
+        //new
     }
     
     

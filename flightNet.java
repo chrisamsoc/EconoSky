@@ -17,19 +17,24 @@ public class flightNet {
     
 
     private HashMap<String,City> cities;
-    
+    public int teer;
     
     public flightNet()
     {
         cities = new HashMap();
-       
+        
     }
     
     
-    public void addCity(String cName)
+    public void addCity(String cName, int t)
     {
+        //org part
         System.out.println(cName);
         cities.putIfAbsent(cName, new City(cName));
+        
+        //new part
+        this.teer = t;
+        
     }
     
     
