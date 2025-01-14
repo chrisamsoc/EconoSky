@@ -50,7 +50,7 @@ public class EconoSky {
         
         System.out.println("");
         price loh = new price(5);
-        System.out.println(loh.determine(5,3,2,3,2,5));
+        System.out.println(loh.determine(6,3,2,22,2,5));
         
         
         

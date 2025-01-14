@@ -94,17 +94,18 @@ public class price {
         //how many months away is departure
         if(depMonth < bookMonth)
         {
+            System.out.println("increment");
             depMonth +=12;
         }
         int monthAway = depMonth-bookMonth;
-        
+        System.out.println("monthAway:"+monthAway);
         //calculate monthAwayFee by incremenitng by 0.15 each time and by adding 0.1 by  i each time
         double monthFee = 1;
-        for(int i = 6; monthAway < i ;i--)
+        for(int i = monthAway; 1 <i ;i--)
         {
-            monthFee += (0.15)+(0.1)*i;
+            monthFee += (0.15)+(0.02)*i;
         }
-        
+        System.out.println("MonthFee:"+monthFee);
         double maximum = minimum*monthFee;
         
         //determine if month is a special one, as if it is june,july, december, january
@@ -114,10 +115,21 @@ public class price {
             maximum = maximum *1.1;
         }
         
+        //amplitude
+        double aVal = (maximum-minimum)/2;
+        double bVal = (maximum+minimum)/2;
         
         
+        System.out.println("Period:"+period);
+        System.out.println("C:"+cVal);
+        System.out.println("b:"+bVal);
+        System.out.println("a"+aVal);
+        System.out.println("max:"+maximum);
+        System.out.println("min:"+minimum);
         
-        return costStuff;
+        double ticketPrice = aVal * Math.sin(cVal * depDay)+bVal;
+        
+        return ticketPrice;
     }
     
     
