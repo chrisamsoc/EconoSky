@@ -15,6 +15,7 @@ import java.util.HashMap;
 public class City {
     HashMap<String, Integer> neighbor;
     String name; 
+    int tier;
     
     //cName meaning original Name
     public City(String oName)
@@ -23,7 +24,7 @@ public class City {
         this.name = oName;
         this.neighbor = new HashMap();
         
-        //new
+        
     }
     
     

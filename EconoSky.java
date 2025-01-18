@@ -54,5 +54,22 @@ public class EconoSky {
         
         
         
+        
+        
+        System.out.println("=========================================================");
+        
+        flightManager lyh = new flightManager();
+        
+        airline AC = new airline("Air Canada","Edmonton","Star Alliance");
+        AC.addDestination("Regina");
+        
+        lyh.addAirlione(AC);
+        lyh.destinations();
+        lyh.flightSchedule("Star Alliance", 3, 6);
+        
+        for(String key: AC.validPairs.keySet())
+        {
+            System.out.println(key);
+        }
     }
 }
