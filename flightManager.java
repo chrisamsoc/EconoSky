@@ -15,9 +15,9 @@ import java.util.HashMap;
 import java.util.*;      
 public class flightManager {
     //airline name and airline class instance
-    private HashMap<String,airline> starAlliance = new HashMap();
-    private HashMap<String,airline> oneWorld = new HashMap();
-    private HashMap<String,airline> skyTeam = new HashMap();
+    public HashMap<String,airline> starAlliance = new HashMap();
+    public HashMap<String,airline> oneWorld = new HashMap();
+    public HashMap<String,airline> skyTeam = new HashMap();
     private HashMap<String, HashMap> team = new HashMap();
     
     
@@ -28,13 +28,13 @@ public class flightManager {
     this.team.put("Star Alliance",starAlliance);
     this.team.put("Sky Team",skyTeam);
     this.team.put("One World",oneWorld);
-    
+    this.destinations();
     }
     public void destinations()
     {
         //tier 1
         tiers.put("Frankfurt",1);
-        tiers.put("Toyio",1);
+        tiers.put("Tokyo",1);
         tiers.put("Atlanta",1);
         tiers.put("Paris",1);
         tiers.put("London",1);
@@ -71,7 +71,7 @@ public class flightManager {
         
     }
     
-    public void addAirlione(airline company)      
+    public void addAirline(airline company)      
     {
         if ((company.getAlliance()).equals("Star Alliance"))
         {
@@ -100,7 +100,7 @@ public class flightManager {
         //tier 2 to tier 4 | once every 2 days
         //tier 3 to tier 3 | once every 2 days
         //tier 3 to tier 4| once every 3 days
-        //tier 4 to tier 4 | once every 4 days
+        //tier 4 to tier 4 | once every 3 days
     
     //we use a sine function to determine avaibillity 
     // a period shall represent 4 quarters of a day, 
@@ -122,8 +122,12 @@ public class flightManager {
         //loop for each airline attempt
         for(String key:allianceAirlines.keySet())
        {
+           System.out.printf("Now servicing %s\n",key);
+           System.out.println("=====");
            String hub = allianceAirlines.get(key).getHub();
            int hubTier = tiers.get(hub);
+           System.out.printf("hub:%s : tier: %d\n",hub,hubTier);
+           allianceAirlines.get(key).validPairs.clear();
            
            
            for(int i=0; i < (allianceAirlines.get(key)).destinations.size();i++)
@@ -131,28 +135,36 @@ public class flightManager {
                String arr = (allianceAirlines.get(key)).destinations.get(i);
                
                int arrTier =  tiers.get(arr);
-               
+               System.out.printf("arr:%s : tier: %d\n",arr,arrTier);
                double p = period(hubTier,arrTier,monthDays,depDay);
                double c= (2*Math.PI)/p;
+               System.out.printf("period:%f| c:%f\n",p,c);
                
                //we check to points (i.125 and i.625 to see if flights occur)
                double point1 = Math.sin(c*(depDay+0.125));
                double point2 = Math.sin(c*(depDay+0.625));
-               
+               System.out.printf("point1:%f| point2:%f\n",point1,point2);
                if (point1 > 0 || point2 > 0)
                {
-                   (allianceAirlines.get(key)).validPairs.put(hub, arr);
+                   System.out.println("valid flight "+ arr);
+                   (allianceAirlines.get(key)).validPairs.add(hub);
+                   
+                   (allianceAirlines.get(key)).validPairs2.add(arr);
                }
                
                //check for return flight
                //done by checking to see if a departure flight existed the day prior, if so then on this day its arrival flight must occur
-               double point3 = point1-1;
-               double point4 = point2-1;
+               double point3 = Math.sin(c*(depDay+0.125-1));
+               double point4 = Math.sin(c*(depDay+0.625-1));
                
-               if (point3 > 0 || point2 > 4)
+               if (point3 > 0 || point4 > 0)
                {
-                   (allianceAirlines.get(key)).validPairs.put(arr, hub);
+                   System.out.println("valid flight "+ arr);
+                   (allianceAirlines.get(key)).validPairs.add(arr);
+                   
+                   (allianceAirlines.get(key)).validPairs2.add(hub);
                }
+
            }
        }
         

@@ -24,16 +24,17 @@ public class price {
     if((bookingClass-6) >0 )
     {
         System.out.println("economy");
-        this.baseCost = 380;
-        for(int i = 0; i < (bookingClass-6);i++)
+        this.baseCost = 300;
+        for(int i = 3; (bookingClass-6) < i ;i--)
         {
             this.baseCost +=60;
         }
+        System.out.println("basecost:"+this.baseCost);
     }
     //if between 4-6
     else if ((bookingClass-3) >0 ){
          System.out.println("premium economy");
-        this.baseCost = 680;
+        this.baseCost = 500;
         for(int i = 3; (bookingClass-3) < i ;i--)
         {
             this.baseCost +=142;
@@ -44,7 +45,7 @@ public class price {
     else
     {
          System.out.println("buisness");
-        this.baseCost = 1200;
+        this.baseCost = 1100;
         for(int i = 3; bookingClass < i ;i--)
         {
             this.baseCost +=300;
@@ -54,7 +55,7 @@ public class price {
     }
     //month when booked, month at departure, day in month of booking, day in month of departure, depature tier, arrival tier
     
-    public double determine(int bookMonth,int depMonth,int bookDay, int depDay, int tierDep, int tierArr)
+    public int determine(int bookMonth, int depMonth, LocalDate bookDay, int depDay, int tierDep, int tierArr, double premium)
     {
         //determine the default price between the cities first
         
@@ -128,8 +129,10 @@ public class price {
         System.out.println("min:"+minimum);
         
         double ticketPrice = aVal * Math.sin(cVal * depDay)+bVal;
+        ticketPrice = ticketPrice * premium;
+        int charge = (int) ticketPrice;
         
-        return ticketPrice;
+        return charge;
     }
     
     

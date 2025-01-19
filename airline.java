@@ -14,19 +14,22 @@ public class airline {
     private String name;
     private String hub;
     private String alliance;
-    
+    public double premium;
     
     public ArrayList<String> destinations = new ArrayList();
     
-    //hashmap contains valid destination pairs
-    public HashMap<String,String> validPairs = new HashMap();
+    //array list containing departures 
+    public ArrayList<String> validPairs = new ArrayList();
     
-    public airline(String name, String hub, String alliance)
+       //array list containing arrivals
+    public ArrayList<String> validPairs2 = new ArrayList();
+    //premiumFactor influences base cost of flights
+    public airline(String name, String hub, String alliance, double premiumFactor)
     {
         this.name=name;
         this.hub=hub;
         this.alliance=alliance;
-        
+        this.premium = premiumFactor;
     }
     
     public void addDestination(String destination)

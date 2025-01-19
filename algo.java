@@ -15,8 +15,10 @@ public class algo {
     
     public flightNet object;
     private String departure,arrival;
-    
-    
+    public HashMap<String,String> airlinePath = new HashMap();
+    public ArrayList<String> airlines = new ArrayList();
+    public int newCost = 0;
+    public List<String> path = new ArrayList();
     
     public algo(flightNet managa, String depName, String arrName)
     {
@@ -75,13 +77,14 @@ public class algo {
                 
             City currentCityObject = this.object.getCity(currentCity);
              for (String neighbor : currentCityObject.getNeighbor().keySet()) {
-                int newCost = currentCost + currentCityObject.getCost(neighbor);
+                newCost = currentCost + currentCityObject.getCost(neighbor);
                 
                 // If path that is shorter is found
                 if (newCost < cheapest.get(neighbor)) {
                     cheapest.put(neighbor, newCost);
                     previous.put(neighbor, currentCity);
                     pq.offer(new cityCost(neighbor, newCost));
+                    System.out.println("current city+"+currentCity);
                 }
             }
             
@@ -89,7 +92,7 @@ public class algo {
         }
         
         //rebuilding path from end to start
-        List<String> path = new ArrayList();
+        
         String current = this.arrival;
             // Traverse back using the previousCities map to reconstruct the path
         while (current != null) {
@@ -101,7 +104,17 @@ public class algo {
         
             // Reverse path so it not in wrong direction
         Collections.reverse(path);
-        
+              
+        for (int k=0; k < (path.size() -1);k++)
+        {
+            String dep = path.get(k);
+            String arr = path.get(k+1);
+            String key = dep+"|"+arr;
+            String airline = this.object.routes.get(key);
+            airlines.add(airline);
+            System.out.println("Airline:"+airline);
+        }
+        System.out.printf("Total cost is:%d\n",newCost);
         return path;
         
         
@@ -130,6 +143,5 @@ public class algo {
         
     
 }
-
 
 
