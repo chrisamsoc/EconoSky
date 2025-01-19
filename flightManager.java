@@ -82,7 +82,7 @@ public class flightManager {
             oneWorld.put(company.getName(),company);
         }
         
-        else if ((company.getAlliance()).equals("Sky Team"))
+        else if ((company.getAlliance()).equals("Sky team"))
         {
             skyTeam.put(company.getName(),company);
         }

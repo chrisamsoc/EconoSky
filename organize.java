@@ -44,34 +44,38 @@ import java.util.*;
 public class organize {
     
     flightManager manage = new flightManager();
-    flightNet net = new flightNet();
+    flightNet netStar = new flightNet();
+    flightNet netSky = new flightNet();
+    flightNet netOne = new flightNet();
     airline AC = new airline("Air Canada","Toronto","Star Alliance",1.2);
-    airline LH = new airline("Lufthansa","Frankfurt","Star Alliance",0.5);
+    airline LH = new airline("Lufthansa","Frankfurt","Star Alliance",0.9);
    airline SW = new airline("Swiss Airlines","Zurich","Star Alliance",1.3);
     airline SN = new airline("Singapore Airlines","Singapore","Star Alliance",1.3);
     airline UA = new airline("United Airlines","Chicago","Star Alliance",0.9);
     airline ANA = new airline("ANA","Tokyo","Star Alliance",1.25);
     airline PA = new airline("Phillipine Airlines","Manilla","Star Alliance",0.8);
     airline ACh = new airline("Air China","Beijing","Star Alliance",0.7);
-    airline KLM = new airline("KLM","Amsterdam","Sky team",1.2);
+    airline KLM = new airline("KLM","Amsterdam","Sky team",035);
     airline AF = new airline("Air France","Paris","Sky team",1.2);
     airline DAL = new airline("Delta Airlines","Atlanta","Sky team",0.9);
     airline KAL = new airline("Korean Airlines","Seoul","Sky team",1.25);
     airline CE = new airline("China Eastern Airlines","Shanghai","Sky team",1);
     airline SA = new airline("Saudi Airlines","Jedha","Sky team",0.8);
     airline ITA = new airline("ITA","Rome","Sky team",1);
-    airline BA = new airline("British Airways","London","One World",1.3);
+    airline BA = new airline("British Airways","London","One World",0.7);
     airline IB = new airline("Iberia Airlines","Madrid","One World",0.9);
     airline FN = new airline("Finnair","Helsinki","One World",1);
-    airline CP = new airline("Cathay Pacific","Hong Kong","One World",1.15);
+    airline CP = new airline("Cathay Pacific","Hong Kong","One World",1.1);
       airline AA = new airline("American Airlines","New York","One World",0.8);
-        airline JAL = new airline("Japan Airlines","Tokyo","One World",1.3); 
+        airline JAL = new airline("Japan Airlines","Tokyo","One World",1.2); 
     public organize()
     {
         //add cities to network
        for(String key: manage.tiers.keySet())
        {
-           net.addCity(key);
+           netStar.addCity(key);
+           netSky.addCity(key);
+           netOne.addCity(key);
        }
         
         //begin with star alliance
@@ -483,9 +487,7 @@ JAL.addDestination("Jedha");
         
         //loop through every airline in star alliance
         //key is current airline
-        flightNet netStar = net;
-        flightNet netSky = net;
-        flightNet netOne = net;
+      
         for(String key: manage.starAlliance.keySet())
         {
             for (int i = 0; i < (manage.starAlliance.get(key)).validPairs.size();i++)
@@ -573,7 +575,7 @@ JAL.addDestination("Jedha");
          List<String> airlinePath = null;
          Integer cost = null;
          //priorities star alliance over other carriers
-         if (starAlliance.newCost >= skyTeam.newCost && starAlliance.newCost >= oneWorld.newCost)
+         if (starAlliance.newCost > skyTeam.newCost && starAlliance.newCost > oneWorld.newCost)
          {
              newPath = shortestPathStar;
              airlinePath = airlinesStar;
@@ -592,18 +594,59 @@ JAL.addDestination("Jedha");
           cost = oneCost;
          }
          System.out.println("================================");
-         System.out.println("Intenary Details");
-         System.out.println(newPath.get(0));
-         for (int i = 0; i < airlinePath.size();i++)
+         System.out.println("Intenary Details Star Alliance");
+         System.out.println(shortestPathStar.get(0));
+         for (int i = 0; i < airlinesStar.size();i++)
          {
-             System.out.printf("Through %s\n",airlinePath.get(i));
-             System.out.println(newPath.get(i+1));
+             System.out.printf("Through %s\n",airlinesStar.get(i));
+             System.out.println(shortestPathStar.get(i+1));
              
          }
          
-         System.out.printf("Total cost is:%d\n",(cost*passengers));
+         System.out.printf("Total cost is:%d\n",(starCost*passengers));
          
+                  System.out.println("================================");
+         System.out.println("Intenary Details SkyTeam");
+         System.out.println(shortestPathSky.get(0));
+         for (int i = 0; i < airlinesSky.size();i++)
+         {
+             System.out.printf("Through %s\n",airlinesSky.get(i));
+             System.out.println(shortestPathSky.get(i+1));
+             
+         }
          
+         System.out.printf("Total cost is:%d\n",(skyCost*passengers));
+         
+          System.out.println("================================");
+         System.out.println("Intenary Details oneWorld");
+         System.out.println(shortestPathOne.get(0));
+         for (int i = 0; i < airlinesOne.size();i++)
+         {
+             System.out.printf("Through %s\n",airlinesOne.get(i));
+             System.out.println(shortestPathOne.get(i+1));
+             
+         }
+         
+         System.out.printf("Total cost is:%d\n",(oneCost*passengers));
+         
+         System.out.println("Please select an option: \n1-Star Alliance\n2-SkyTeam\n3-OneWorld");
+         int choice = reader.nextInt();
+         
+         switch(choice){
+             case 1:
+              System.out.println("You have selected Star Alliance");
+              System.out.printf("Your total cost including tax is $%.2f",starCost*1.13);
+             break;
+              case 2:
+              System.out.println("You have selected Sky Team");
+              System.out.printf("Your total cost including tax is $%.2f",skyCost*1.13);
+             break;
+              case 3:
+              System.out.println("You have selected One World");
+              System.out.printf("Your total cost including tax is $%.2f",oneCost*1.13);
+             break;
+         }
+             
     }
     
     
