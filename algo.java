@@ -84,7 +84,7 @@ public class algo {
                     cheapest.put(neighbor, newCost);
                     previous.put(neighbor, currentCity);
                     pq.offer(new cityCost(neighbor, newCost));
-                    System.out.println("current city+"+currentCity);
+                    
                 }
             }
             
@@ -112,9 +112,9 @@ public class algo {
             String key = dep+"|"+arr;
             String airline = this.object.routes.get(key);
             airlines.add(airline);
-            System.out.println("Airline:"+airline);
+            
         }
-        System.out.printf("Total cost is:%d\n",newCost);
+        
         return path;
         
         

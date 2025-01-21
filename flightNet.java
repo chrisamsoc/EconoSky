@@ -46,17 +46,16 @@ public class flightNet {
         //use Integer instead of int to deal with null stuff
         Integer exists = (cities.get(depName)).neighbor.get(arrName);
         
-         System.out.println("Attempting to add flight: " + depName + " -> " + arrName + " with cost: " + cost);
+        
         if (depName.equals(arrName))
         {
             return;
         }
         else if (exists != null && exists > cost)
         {
-             System.out.println("Better option exists for " + depName + " -> " + arrName + ". Removing old route.");
-            System.out.print("better option exists");
+             
             cities.get(depName).neighbor.remove(arrName);
-            System.out.printf("%s to %s | cost : %d\n",depName,arrName,cost);
+           
         cities.get(depName).add(arrName,cost);
         String specialKey = depName+"|"+arrName;
         routes.put(specialKey, airline);
@@ -68,8 +67,7 @@ public class flightNet {
         }
         else {
             
-            System.out.print("  ====");
-            System.out.printf("%s to %s | cost : %d\n",depName,arrName,cost);
+           
             cities.get(depName).add(arrName,cost);
             String specialKey = depName+"|"+arrName;
             routes.put(specialKey, airline);
@@ -84,7 +82,7 @@ public class flightNet {
     public void printCityNeighbors(String cityName) {
     City city = cities.get(cityName);
     if (city != null) {
-        System.out.println("Neighbors of " + cityName + ": " + city.getNeighbor());
+       
     }
 }
     

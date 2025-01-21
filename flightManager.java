@@ -62,11 +62,11 @@ public class flightManager {
         tiers.put("Chicago",3);
         tiers.put("Rome",3);
         
-        //tier 4
-        tiers.put("Edmonton",4);
-        tiers.put("Calgary",4);
-        tiers.put("Regina",4);
-        tiers.put("St John",4);
+      
+        tiers.put("Edmonton",3);
+        tiers.put("Calgary",3);
+        tiers.put("Regina",3);
+        tiers.put("St John",3);
         
         
     }
@@ -103,7 +103,7 @@ public class flightManager {
         //tier 4 to tier 4 | once every 3 days
     
     //we use a sine function to determine avaibillity 
-    // a period shall represent 4 quarters of a day, 
+    
     
     
     // flights to be represented within 1 day are to be deterined by periodic functions
@@ -122,11 +122,10 @@ public class flightManager {
         //loop for each airline attempt
         for(String key:allianceAirlines.keySet())
        {
-           System.out.printf("Now servicing %s\n",key);
-           System.out.println("=====");
+           
            String hub = allianceAirlines.get(key).getHub();
            int hubTier = tiers.get(hub);
-           System.out.printf("hub:%s : tier: %d\n",hub,hubTier);
+         
            allianceAirlines.get(key).validPairs.clear();
            
            
@@ -135,18 +134,18 @@ public class flightManager {
                String arr = (allianceAirlines.get(key)).destinations.get(i);
                
                int arrTier =  tiers.get(arr);
-               System.out.printf("arr:%s : tier: %d\n",arr,arrTier);
+               
                double p = period(hubTier,arrTier,monthDays,depDay);
                double c= (2*Math.PI)/p;
-               System.out.printf("period:%f| c:%f\n",p,c);
+               
                
                //we check to points (i.125 and i.625 to see if flights occur)
                double point1 = Math.sin(c*(depDay+0.125));
                double point2 = Math.sin(c*(depDay+0.625));
-               System.out.printf("point1:%f| point2:%f\n",point1,point2);
+              
                if (point1 > 0 || point2 > 0)
                {
-                   System.out.println("valid flight "+ arr);
+                   
                    (allianceAirlines.get(key)).validPairs.add(hub);
                    
                    (allianceAirlines.get(key)).validPairs2.add(arr);
@@ -159,7 +158,7 @@ public class flightManager {
                
                if (point3 > 0 || point4 > 0)
                {
-                   System.out.println("valid flight "+ arr);
+                   
                    (allianceAirlines.get(key)).validPairs.add(arr);
                    
                    (allianceAirlines.get(key)).validPairs2.add(hub);
@@ -244,11 +243,7 @@ public class flightManager {
                  period = 3;
               }
               break;
-              
-              
-            
-        
-                  
+ 
               
         
       }

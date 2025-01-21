@@ -18,22 +18,22 @@ public class price {
     private int baseCost;
     public price(int bookingClass)
     {
-        System.out.println("run");
+        
     
         //if between 7-9
     if((bookingClass-6) >0 )
     {
-        System.out.println("economy");
+        
         this.baseCost = 300;
         for(int i = 3; (bookingClass-6) < i ;i--)
         {
             this.baseCost +=60;
         }
-        System.out.println("basecost:"+this.baseCost);
+        
     }
     //if between 4-6
     else if ((bookingClass-3) >0 ){
-         System.out.println("premium economy");
+         
         this.baseCost = 500;
         for(int i = 3; (bookingClass-3) < i ;i--)
         {
@@ -44,7 +44,7 @@ public class price {
     //if between 1-3
     else
     {
-         System.out.println("buisness");
+         
         this.baseCost = 1100;
         for(int i = 3; bookingClass < i ;i--)
         {
@@ -64,7 +64,7 @@ public class price {
         for (int i = 1; i <=tierDep; i++)
         {
             increments -= 0.085;
-            System.out.println(i);
+            
           
         }
         
@@ -72,13 +72,12 @@ public class price {
         for (int i = 1; i <=tierArr; i++)
         {
             increments -= 0.085;
-            System.out.println(i);
+           
           
         }
         
         double costStuff= increments*this.baseCost;
-        System.out.println(increments);
-        System.out.println(this.baseCost);
+       
         
         //now we calculate the values for the sine function
         //number of days in month
@@ -95,18 +94,18 @@ public class price {
         //how many months away is departure
         if(depMonth < bookMonth)
         {
-            System.out.println("increment");
+           
             depMonth +=12;
         }
         int monthAway = depMonth-bookMonth;
-        System.out.println("monthAway:"+monthAway);
+        
         //calculate monthAwayFee by incremenitng by 0.15 each time and by adding 0.1 by  i each time
         double monthFee = 1;
         for(int i = monthAway; 1 <i ;i--)
         {
             monthFee += (0.15)+(0.02)*i;
         }
-        System.out.println("MonthFee:"+monthFee);
+       
         double maximum = minimum*monthFee;
         
         //determine if month is a special one, as if it is june,july, december, january
@@ -121,12 +120,7 @@ public class price {
         double bVal = (maximum+minimum)/2;
         
         
-        System.out.println("Period:"+period);
-        System.out.println("C:"+cVal);
-        System.out.println("b:"+bVal);
-        System.out.println("a"+aVal);
-        System.out.println("max:"+maximum);
-        System.out.println("min:"+minimum);
+      
         
         double ticketPrice = aVal * Math.sin(cVal * depDay)+bVal;
         ticketPrice = ticketPrice * premium;

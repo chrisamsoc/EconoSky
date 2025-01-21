@@ -439,19 +439,19 @@ JAL.addDestination("Jedha");
         System.out.println("Select Package");
         switch(bookingClass){
         case 1: 
-        System.out.println("9-Basic: A no-frills option with minimal amenities. No cancellation or changes allowed. Base Price:300");
-        System.out.println("8-Flex:Includes flexible cancellation and date changes with some additional legroom. Base Price:360");
-        System.out.println("7-Plus: Includes a bit more comfort, such as extra legroom, priority boarding, and flexibility with changes.Base Price:420");
+        System.out.println("9-Basic: A no-frills option with minimal amenities. No cancellation or changes allowed. Base Price per ticket:300");
+        System.out.println("8-Flex:Includes flexible cancellation and date changes with some additional legroom. Base Price per ticket:360");
+        System.out.println("7-Plus: Includes a bit more comfort, such as extra legroom, priority boarding, and flexibility with changes.Base Price per ticket:420");
         break;
         case 2:
-        System.out.println("6-Basic: Standard premium economy seat, priority boarding, and enhanced meal options. No cancellations allowed.Base Price:500 ");
-        System.out.println("5-F1ex: Includes seat upgrades, more flexible cancellation and changes, priority check-in.Base Price:642");
-        System.out.println("4-Plus: Offers extra legroom, lounge access, additional baggage allowance, and priority boarding with full flexibility for cancellations and changes.Base Price:784");
+        System.out.println("6-Basic: Standard premium economy seat, priority boarding, and enhanced meal options. No cancellations allowed.Base Price per ticket:500 ");
+        System.out.println("5-F1ex: Includes seat upgrades, more flexible cancellation and changes, priority check-in.Base Price per ticket:642");
+        System.out.println("4-Plus: Offers extra legroom, lounge access, additional baggage allowance, and priority boarding with full flexibility for cancellations and changes.Base Price per ticket:784");
         break;
         case 3:
-        System.out.println("3-Basic: Standard business class seat with in-flight meals and entertainment. Limited flexibility with cancellations.Base Price:1100");
-        System.out.println("2- Flex: More flexible with cancellations, additional baggage, access to airport lounges, and more premium meal options.Base Price:1400");
-        System.out.println("1- Premium: Includes full access to airport lounges, priority check-in, wider seating, exclusive meal options, and greater flexibility with cancellations and changes.Base Price:1700");
+        System.out.println("3-Basic: Standard business class seat with in-flight meals and entertainment. Limited flexibility with cancellations.Base Price per ticket:1100");
+        System.out.println("2- Flex: More flexible with cancellations, additional baggage, access to airport lounges, and more premium meal options.Base Price per ticket:1400");
+        System.out.println("1- Premium: Includes full access to airport lounges, priority check-in, wider seating, exclusive meal options, and greater flexibility with cancellations and changes.Base Price per ticket:1700");
         break;
         
         
@@ -494,11 +494,11 @@ JAL.addDestination("Jedha");
             {
                 String dep2 = (manage.starAlliance.get(key)).validPairs.get(i);
                 String arr2 = (manage.starAlliance.get(key)).validPairs2.get(i);
-                System.out.printf("Departure:%s | Arrival %s\n",dep2,arr2);
+                
                 int tierDep = manage.tiers.get(dep2);
                 int tierArr = manage.tiers.get(arr2);
                 double premium = (manage.starAlliance.get(key)).premium;
-                System.out.println("premium\\\\\\\\\\\\\\\\\\\\ "+premium);
+                
                 int ticketCost = charge.determine(currentMonth, depMonth,currentDay,depDay, tierDep, tierArr,premium );
                 netStar.addFlight(dep2,arr2,ticketCost,key);
                 
@@ -520,11 +520,11 @@ JAL.addDestination("Jedha");
             {
                 String dep2 = (manage.skyTeam.get(key)).validPairs.get(i);
                 String arr2 = (manage.skyTeam.get(key)).validPairs2.get(i);
-                System.out.printf("Departure:%s | Arrival %s\n",dep2,arr2);
+                
                 int tierDep = manage.tiers.get(dep2);
                 int tierArr = manage.tiers.get(arr2);
                 double premium = (manage.skyTeam.get(key)).premium;
-                System.out.println("premium\\\\\\\\\\\\\\\\\\\\ "+premium);
+                
                 int ticketCost = charge.determine(currentMonth, depMonth,currentDay,depDay, tierDep, tierArr,premium );
                 netSky.addFlight(dep2,arr2,ticketCost,key);
                 
@@ -547,11 +547,11 @@ JAL.addDestination("Jedha");
             {
                 String dep2 = (manage.oneWorld.get(key)).validPairs.get(i);
                 String arr2 = (manage.oneWorld.get(key)).validPairs2.get(i);
-                System.out.printf("Departure:%s | Arrival %s\n",dep2,arr2);
+                
                 int tierDep = manage.tiers.get(dep2);
                 int tierArr = manage.tiers.get(arr2);
                 double premium = (manage.oneWorld.get(key)).premium;
-                System.out.println("premium\\\\\\\\\\\\\\\\\\\\ "+premium);
+                
                 int ticketCost = charge.determine(currentMonth, depMonth,currentDay,depDay, tierDep, tierArr,premium );
                 netOne.addFlight(dep2,arr2,ticketCost,key);
                 
@@ -635,15 +635,15 @@ JAL.addDestination("Jedha");
          switch(choice){
              case 1:
               System.out.println("You have selected Star Alliance");
-              System.out.printf("Your total cost including tax is $%.2f",starCost*1.13);
+              System.out.printf("Your total cost including tax is $%.2f",starCost*1.13*passengers);
              break;
               case 2:
               System.out.println("You have selected Sky Team");
-              System.out.printf("Your total cost including tax is $%.2f",skyCost*1.13);
+              System.out.printf("Your total cost including tax is $%.2f",skyCost*1.13*passengers);
              break;
               case 3:
               System.out.println("You have selected One World");
-              System.out.printf("Your total cost including tax is $%.2f",oneCost*1.13);
+              System.out.printf("Your total cost including tax is $%.2f",oneCost*1.13*passengers);
              break;
          }
              
