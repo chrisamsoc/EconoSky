@@ -43,10 +43,14 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 public class organize {
     
+    
+    //define flight manager class to deal with schedules of airlines
     flightManager manage = new flightManager();
+    //create instances of flightNetworks for each alliance, storing city locations
     flightNet netStar = new flightNet();
     flightNet netSky = new flightNet();
     flightNet netOne = new flightNet();
+    //create instances of airline class for each airline
     airline AC = new airline("Air Canada","Toronto","Star Alliance",1.2);
     airline LH = new airline("Lufthansa","Frankfurt","Star Alliance",0.9);
    airline SW = new airline("Swiss Airlines","Zurich","Star Alliance",1.3);
@@ -68,6 +72,8 @@ public class organize {
     airline CP = new airline("Cathay Pacific","Hong Kong","One World",1.1);
       airline AA = new airline("American Airlines","New York","One World",0.8);
         airline JAL = new airline("Japan Airlines","Tokyo","One World",1.2); 
+        
+        //constructor
     public organize()
     {
         //add cities to network
@@ -132,7 +138,7 @@ public class organize {
            
         
         
-        
+        //adds destinations for each airline, respecively based on location and prestige of airline
         AC.addDestination("Frankfurt");
 AC.addDestination("Paris");
 AC.addDestination("London");
@@ -385,32 +391,36 @@ JAL.addDestination("Jedha");
     public void check(){
         
         
-              
+         //instance of LocalDate class used to pull curent time
         LocalDate currentDate = LocalDate.now();
-               
+          //get currentyear and current month for calculations of date and time, useful to determine if to increase price or not
         int currentYear = currentDate.getYear();
         int currentMonth = currentDate.getMonthValue();  
-        
+        //instance of scanner class
         Scanner reader = new Scanner(System.in);
                  //create class instance for month of departure
- 
+          //try and except loop to deal with bad errors
+         try{        
+             //welcomes user and asks for departure date
         System.out.println("Welcome to Econosky:");
         System.out.println("====================");
         System.out.println("Please input  a departure date (yyyy-mm-dd):");
         String departureDate = reader.nextLine();
+        //cehecks if it is a possible departure date
         if (isValidDate(departureDate) == false)
         {
             System.out.println("date is not valid, please try again");
             check();
             return;
         }
+        //takes string and splices it 
         int depMonth = Integer.parseInt(departureDate.substring(5,7));
         int depYear = Integer.parseInt(departureDate.substring(0,4));
         int depDay = Integer.parseInt(departureDate.substring(8,10));
          // Create LocalDate object for the input date
         LocalDate inputDate = LocalDate.of(depYear, depMonth, depDay);
         
-        // Get the current date
+        // current day 
         LocalDate currentDay = LocalDate.now();
         
         //6 months from now date
@@ -425,16 +435,28 @@ JAL.addDestination("Jedha");
             return;   
         }
         
-        
+        //asks for passengers 
        System.out.println("How many passengers?:");
        int passengers = reader.nextInt();
-       
+       //checks to see if more passengers then allowed
+       if (passengers > 9)
+       {
+           System.out.println("There may not be more than 9 passengers");
+           check();
+           return;
+       }
         
+       //asks for booking class
         System.out.println("Please select booking class, 1 for economy, 2 for premium economy, 3 for buisness");
         int bookingClass = reader.nextInt();
-
+        if (bookingClass !=1 && bookingClass != 2 && bookingClass != 3)
+        {
+            System.out.println("you have not selected a proper booking class, as punishment restart the booking proccess");
+            check();
+            return;
+        }
  
-  
+        //asks user to input desire package option, uses switch cases to do so
      
         System.out.println("Select Package");
         switch(bookingClass){
@@ -456,8 +478,24 @@ JAL.addDestination("Jedha");
         
         
         
-    }bookingClass = reader.nextInt();
+    }
+        bookingClass = reader.nextInt();
+    // extra nextLine cancels the leading \n character
         reader.nextLine();
+        //checks for valid input
+       if (bookingClass > 9 || bookingClass <1) 
+       {
+           System.out.println("you have not selected a proper package, as punishment restart the booking proccess");
+           check();
+           return;
+       }
+        //informs users of serviced cities
+        System.out.println("Serviced cities are as follows:");
+        for (String key : manage.tiers.keySet())
+        {
+            System.out.println(key);
+        }
+        //asks for depature and checks if valid 
         System.out.println("Please select departure:");
         String dep = reader.nextLine();
         
@@ -468,7 +506,8 @@ JAL.addDestination("Jedha");
             check();
             return;
         }
-        
+       //asks for desitnation and checks if is valid
+        System.out.println("==========================");
         System.out.println("Please select destination:");
         String arr = reader.nextLine();
         if (manage.tiers.get(arr) == null)
@@ -477,10 +516,11 @@ JAL.addDestination("Jedha");
             check();
             return;
         }
-        
-        
+       
+        //creates instance of price class to determine price for flights
         price charge = new price(bookingClass);
         //begin checking to see what flights occur on the dates
+        //checks for each alliance as they have seperate networks
         manage.flightSchedule("Star Alliance",depMonth,depDay);
         manage.flightSchedule("Sky Team",depMonth,depDay);
         manage.flightSchedule("One World",depMonth,depDay);
@@ -488,18 +528,23 @@ JAL.addDestination("Jedha");
         //loop through every airline in star alliance
         //key is current airline
       
+        
         for(String key: manage.starAlliance.keySet())
         {
+            //for each airline loop through possible flights and add to network 
             for (int i = 0; i < (manage.starAlliance.get(key)).validPairs.size();i++)
             {
+                
                 String dep2 = (manage.starAlliance.get(key)).validPairs.get(i);
                 String arr2 = (manage.starAlliance.get(key)).validPairs2.get(i);
                 
                 int tierDep = manage.tiers.get(dep2);
                 int tierArr = manage.tiers.get(arr2);
+                //calculates premium based on inputed information of airline
                 double premium = (manage.starAlliance.get(key)).premium;
-                
+                //calculates ticket cost using price class, takes into acount date and tier levels
                 int ticketCost = charge.determine(currentMonth, depMonth,currentDay,depDay, tierDep, tierArr,premium );
+                //adds flight to network 
                 netStar.addFlight(dep2,arr2,ticketCost,key);
                 
 
@@ -507,25 +552,31 @@ JAL.addDestination("Jedha");
 
             }
         }
-        
+        //creates instance of algo class to search through star alliance's network 
          algo starAlliance = new algo(netStar,dep,arr);
+         //creates arrays for the shortest path and airlines throughout the proccess
          List<String> shortestPathStar = starAlliance.execute();
          List<String> airlinesStar = starAlliance.airlines;
+         //gets cost of itenary
          int starCost = starAlliance.newCost;
           //loop through every airline in sky team
         //key is current airline
        for(String key: manage.skyTeam.keySet())
         {
+            //for each airline loop through possible flights and add to network 
             for (int i = 0; i < (manage.skyTeam.get(key)).validPairs.size();i++)
             {
+                
                 String dep2 = (manage.skyTeam.get(key)).validPairs.get(i);
                 String arr2 = (manage.skyTeam.get(key)).validPairs2.get(i);
                 
                 int tierDep = manage.tiers.get(dep2);
                 int tierArr = manage.tiers.get(arr2);
+                //calculates premium based on inputed information of airline
                 double premium = (manage.skyTeam.get(key)).premium;
-                
+                 //calculates ticket cost using price class, takes into acount date and tier levels
                 int ticketCost = charge.determine(currentMonth, depMonth,currentDay,depDay, tierDep, tierArr,premium );
+                  //adds flight to network 
                 netSky.addFlight(dep2,arr2,ticketCost,key);
                 
 
@@ -533,16 +584,20 @@ JAL.addDestination("Jedha");
 
             }
         }
-        
+           //creates instance of algo class to search through sky team network 
          algo skyTeam = new algo(netSky,dep,arr);
+          //creates arrays for the shortest path and airlines throughout the proccess
          List<String> shortestPathSky = skyTeam.execute();
+         //creates arrays for the shortest path and airlines throughout the proccess
          List<String> airlinesSky = skyTeam.airlines;
+          //gets cost of itenary
          int skyCost = skyTeam.newCost;
          
                    //loop through every airline in one world
         //key is current airline
        for(String key: manage.oneWorld.keySet())
         {
+             //for each airline loop through possible flights and add to network 
             for (int i = 0; i < (manage.oneWorld.get(key)).validPairs.size();i++)
             {
                 String dep2 = (manage.oneWorld.get(key)).validPairs.get(i);
@@ -550,9 +605,11 @@ JAL.addDestination("Jedha");
                 
                 int tierDep = manage.tiers.get(dep2);
                 int tierArr = manage.tiers.get(arr2);
+                   //calculates premium based on inputed information of airline
                 double premium = (manage.oneWorld.get(key)).premium;
-                
+                //calculates ticket cost using price class, takes into acount date and tier levels
                 int ticketCost = charge.determine(currentMonth, depMonth,currentDay,depDay, tierDep, tierArr,premium );
+                //add flight to respective network
                 netOne.addFlight(dep2,arr2,ticketCost,key);
                 
 
@@ -560,10 +617,13 @@ JAL.addDestination("Jedha");
 
             }
         }
-        
+          //creates instance of algo class to search through one world network 
          algo oneWorld = new algo(netOne,dep,arr);
+          //creates arrays for the shortest path and airlines throughout the proccess
          List<String> shortestPathOne = oneWorld.execute();
+         //creates arrays for the shortest path and airlines throughout the proccess
          List<String> airlinesOne = oneWorld.airlines;
+             //gets cost of itenary
          int oneCost = oneWorld.newCost;
          if(shortestPathStar.size() ==0 && shortestPathSky.size() ==0 && shortestPathOne.size() ==0 )
          {
@@ -571,31 +631,17 @@ JAL.addDestination("Jedha");
              return;
          }
          
+         //creates instance of algo class to search through sky team network 
          List<String> newPath = null;
+               //creates arrays for the shortest path and airlines throughout the proccess
          List<String> airlinePath = null;
-         Integer cost = null;
-         //priorities star alliance over other carriers
-         if (starAlliance.newCost > skyTeam.newCost && starAlliance.newCost > oneWorld.newCost)
-         {
-             newPath = shortestPathStar;
-             airlinePath = airlinesStar;
-             cost = starCost;
-         }
-         else if (skyTeam.newCost >= starAlliance.newCost && skyTeam.newCost >= oneWorld.newCost)
-         {
-             newPath = shortestPathSky;
-             airlinePath = airlinesSky;
-             cost=skyCost;
-         }
-         else if (oneWorld.newCost >= skyTeam.newCost && oneWorld.newCost >= skyTeam.newCost)
-         {
-          newPath = shortestPathOne;
-          airlinePath = airlinesOne;
-          cost = oneCost;
-         }
+                //creates arrays for the shortest path and airlines throughout the proccess
+         
+       //output itenary details 
          System.out.println("================================");
          System.out.println("Intenary Details Star Alliance");
          System.out.println(shortestPathStar.get(0));
+         //outputs for star alliance
          for (int i = 0; i < airlinesStar.size();i++)
          {
              System.out.printf("Through %s\n",airlinesStar.get(i));
@@ -606,6 +652,7 @@ JAL.addDestination("Jedha");
          System.out.printf("Total cost is:%d\n",(starCost*passengers));
          
                   System.out.println("================================");
+                  //outputs for sky team
          System.out.println("Intenary Details SkyTeam");
          System.out.println(shortestPathSky.get(0));
          for (int i = 0; i < airlinesSky.size();i++)
@@ -618,6 +665,7 @@ JAL.addDestination("Jedha");
          System.out.printf("Total cost is:%d\n",(skyCost*passengers));
          
           System.out.println("================================");
+           //outputs for one world
          System.out.println("Intenary Details oneWorld");
          System.out.println(shortestPathOne.get(0));
          for (int i = 0; i < airlinesOne.size();i++)
@@ -627,11 +675,12 @@ JAL.addDestination("Jedha");
              
          }
          
-         System.out.printf("Total cost is:%d\n",(oneCost*passengers));
          
+         System.out.printf("Total cost is:%d\n",(oneCost*passengers));
+         //asks user to select an option they like
          System.out.println("Please select an option: \n1-Star Alliance\n2-SkyTeam\n3-OneWorld");
          int choice = reader.nextInt();
-         
+         //calculates total cost including tax, uses switch statements
          switch(choice){
              case 1:
               System.out.println("You have selected Star Alliance");
@@ -646,13 +695,28 @@ JAL.addDestination("Jedha");
               System.out.printf("Your total cost including tax is $%.2f",oneCost*1.13*passengers);
              break;
          }
+         //checks for valid input
+         if (choice > 3 || choice < 1)
+         {
+             System.out.println("You have not seleted a proper itenary, as such you get to restart the booking proccess :)");
+             check();
+             return;
+             
+         }
+         //exception ccatcher to deal with errors
+           }catch(Exception e)
+         {
+             System.out.println("Invalid input");
+             check();
+             return;
+         }
              
     }
     
     
     
     
-     
+     //checks to see if date is not random gibirsh or if date is in teh past
     public static boolean isValidDate(String dateStr) {
         try {
             

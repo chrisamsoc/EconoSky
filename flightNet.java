@@ -31,8 +31,7 @@ public class flightNet {
     
     public void addCity(String cName)
     {
-        //org part
-        System.out.println(cName);
+        
         cities.putIfAbsent(cName, new City(cName));
         
         
