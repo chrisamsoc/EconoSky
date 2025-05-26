@@ -390,6 +390,7 @@ JAL.addDestination("Jedha");
     
     public void check(){
         
+        gui player = new gui();
         
          //instance of LocalDate class used to pull curent time
         LocalDate currentDate = LocalDate.now();
@@ -402,14 +403,17 @@ JAL.addDestination("Jedha");
           //try and except loop to deal with bad errors
          try{        
              //welcomes user and asks for departure date
-        System.out.println("Welcome to Econosky:");
-        System.out.println("====================");
-        System.out.println("Please input  a departure date (yyyy-mm-dd):");
-        String departureDate = reader.nextLine();
+         gui create = new gui();
+         
+        String[] output = create.start("please input date yyyy-mm-dd","Please enter number of passengers (Maximum of 9)","Welcome to Econosky");
+        
+       
+        String departureDate = output[0];
         //cehecks if it is a possible departure date
         if (isValidDate(departureDate) == false)
         {
-            System.out.println("date is not valid, please try again");
+            create.message("date is not valid, please try again");
+            
             check();
             return;
         }
@@ -425,33 +429,37 @@ JAL.addDestination("Jedha");
         
         //6 months from now date
         LocalDate sixMonthsLater = currentDay.plusMonths(6);
+       
         
          // Check if the input date is within 6 months from now
         if (!inputDate.isBefore(currentDate) && !inputDate.isAfter(sixMonthsLater)) {
-            System.out.println("Valid dates");
+            
         } else {
-            System.out.println("Date must be in the future and/or within 6 months of booking");
+            create.message("Date invalid, must be at a maximum of 6 months in the future");
             check();
             return;   
         }
         
         //asks for passengers 
        System.out.println("How many passengers?:");
-       int passengers = reader.nextInt();
+       int passengers = Integer.parseInt(output[1]);
        //checks to see if more passengers then allowed
        if (passengers > 9)
        {
-           System.out.println("There may not be more than 9 passengers");
+           
+           create.message("There may not be more than 9 passengers");
            check();
            return;
        }
         
        //asks for booking class
         System.out.println("Please select booking class, 1 for economy, 2 for premium economy, 3 for buisness");
-        int bookingClass = reader.nextInt();
+        
+        int bookingClass = Integer.parseInt(create.start("Please select booking class, 1 for economy, 2 for premium economy, 3 for buisness","Select a seat class"));
         if (bookingClass !=1 && bookingClass != 2 && bookingClass != 3)
         {
-            System.out.println("you have not selected a proper booking class, as punishment restart the booking proccess");
+            
+            create.message("you have not selected a proper booking class, as punishment restart the booking proccess");
             check();
             return;
         }
@@ -459,45 +467,45 @@ JAL.addDestination("Jedha");
         //asks user to input desire package option, uses switch cases to do so
      
         System.out.println("Select Package");
+        
         switch(bookingClass){
         case 1: 
-        System.out.println("9-Basic: A no-frills option with minimal amenities. No cancellation or changes allowed. Base Price per ticket:300");
-        System.out.println("8-Flex:Includes flexible cancellation and date changes with some additional legroom. Base Price per ticket:360");
-        System.out.println("7-Plus: Includes a bit more comfort, such as extra legroom, priority boarding, and flexibility with changes.Base Price per ticket:420");
+            
+        bookingClass = Integer.parseInt(create.start("9-Basic,8-Flex,7-Plus","Select a booking Package"));
+        
         break;
         case 2:
-        System.out.println("6-Basic: Standard premium economy seat, priority boarding, and enhanced meal options. No cancellations allowed.Base Price per ticket:500 ");
-        System.out.println("5-F1ex: Includes seat upgrades, more flexible cancellation and changes, priority check-in.Base Price per ticket:642");
-        System.out.println("4-Plus: Offers extra legroom, lounge access, additional baggage allowance, and priority boarding with full flexibility for cancellations and changes.Base Price per ticket:784");
+        bookingClass = Integer.parseInt(create.start("6-Basic,5-Flex,4-Plus","Select a booking Package"));
         break;
         case 3:
-        System.out.println("3-Basic: Standard business class seat with in-flight meals and entertainment. Limited flexibility with cancellations.Base Price per ticket:1100");
-        System.out.println("2- Flex: More flexible with cancellations, additional baggage, access to airport lounges, and more premium meal options.Base Price per ticket:1400");
-        System.out.println("1- Premium: Includes full access to airport lounges, priority check-in, wider seating, exclusive meal options, and greater flexibility with cancellations and changes.Base Price per ticket:1700");
+        bookingClass = Integer.parseInt(create.start("3-Basic,2-Flex,1-Premium","Select a booking Package"));
         break;
         
         
         
     }
-        bookingClass = reader.nextInt();
-    // extra nextLine cancels the leading \n character
-        reader.nextLine();
+       
+   
+        
         //checks for valid input
        if (bookingClass > 9 || bookingClass <1) 
        {
-           System.out.println("you have not selected a proper package, as punishment restart the booking proccess");
+           
+           create.message("you have not selected a proper package, as punishment restart the booking proccess");
            check();
            return;
        }
         //informs users of serviced cities
-        System.out.println("Serviced cities are as follows:");
+       
+        ArrayList<String> locations = new ArrayList();
+       
         for (String key : manage.tiers.keySet())
         {
-            System.out.println(key);
+            locations.add(key);
         }
         //asks for depature and checks if valid 
         System.out.println("Please select departure:");
-        String dep = reader.nextLine();
+        String dep = create.select(locations,"Select Departure location" );
         
         
         if (manage.tiers.get(dep) == null)
@@ -509,10 +517,11 @@ JAL.addDestination("Jedha");
        //asks for desitnation and checks if is valid
         System.out.println("==========================");
         System.out.println("Please select destination:");
-        String arr = reader.nextLine();
+        String arr = create.select(locations,"Select Destination location" );
+        
         if (manage.tiers.get(arr) == null)
         {
-            System.out.println("invalid destination");
+            create.message("invalid destination");
             check();
             return;
         }
@@ -627,7 +636,8 @@ JAL.addDestination("Jedha");
          int oneCost = oneWorld.newCost;
          if(shortestPathStar.size() ==0 && shortestPathSky.size() ==0 && shortestPathOne.size() ==0 )
          {
-             System.out.println("The selected dates and destinations have no possible combination, please try again");
+            
+             create.message("The selected dates and destinations have no possible combination, please try again");
              return;
          }
          
@@ -642,63 +652,97 @@ JAL.addDestination("Jedha");
          System.out.println("Intenary Details Star Alliance");
          System.out.println(shortestPathStar.get(0));
          //outputs for star alliance
+         ArrayList<String> pathFound1 = new ArrayList();
+         pathFound1.add("Star Alliance");
          for (int i = 0; i < airlinesStar.size();i++)
          {
              System.out.printf("Through %s\n",airlinesStar.get(i));
+             pathFound1.add("Through " + airlinesStar.get(i));
              System.out.println(shortestPathStar.get(i+1));
+             pathFound1.add(shortestPathStar.get(i+1));
              
          }
          
          System.out.printf("Total cost is:%d\n",(starCost*passengers));
-         
+         String mes1 = Integer.toString(starCost*passengers);
                   System.out.println("================================");
                   //outputs for sky team
          System.out.println("Intenary Details SkyTeam");
          System.out.println(shortestPathSky.get(0));
+         
+         ArrayList<String> pathFound2 = new ArrayList();
+         pathFound2.add("Sky Team");
          for (int i = 0; i < airlinesSky.size();i++)
          {
              System.out.printf("Through %s\n",airlinesSky.get(i));
+             pathFound2.add("Through " + airlinesSky.get(i));
              System.out.println(shortestPathSky.get(i+1));
-             
+             pathFound2.add(shortestPathSky.get(i+1));
          }
          
-         System.out.printf("Total cost is:%d\n",(skyCost*passengers));
+         String mes2 =  Integer.toString(skyCost*passengers);
+         int skyteamCost = skyCost*passengers;
+         if (skyCost*passengers > 15000){  mes2 = Integer.toString(skyCost*passengers/10);
+         skyteamCost = skyCost*passengers/10;
+         
+         }
+             
+                 
+         
          
           System.out.println("================================");
            //outputs for one world
          System.out.println("Intenary Details oneWorld");
          System.out.println(shortestPathOne.get(0));
+         
+         ArrayList<String> pathFound3 = new ArrayList();
+         pathFound3.add("One World");
          for (int i = 0; i < airlinesOne.size();i++)
          {
              System.out.printf("Through %s\n",airlinesOne.get(i));
+             pathFound3.add("Through  " + airlinesOne.get(i));
              System.out.println(shortestPathOne.get(i+1));
+             pathFound3.add(shortestPathOne.get(i+1));
              
          }
          
          
          System.out.printf("Total cost is:%d\n",(oneCost*passengers));
+         String mes3 = Integer.toString(oneCost*passengers);
          //asks user to select an option they like
          System.out.println("Please select an option: \n1-Star Alliance\n2-SkyTeam\n3-OneWorld");
-         int choice = reader.nextInt();
+        
+         int choice = Integer.parseInt(create.tell(pathFound1,mes1,pathFound2,mes2,pathFound3,mes3));
          //calculates total cost including tax, uses switch statements
+         String cost = "";
          switch(choice){
              case 1:
               System.out.println("You have selected Star Alliance");
               System.out.printf("Your total cost including tax is $%.2f",starCost*1.13*passengers);
+              cost = String.format("Your total cost including tax is $%.2f",starCost*1.13*passengers);
+              create.message("You have selected Star Alliance "+ cost);
              break;
               case 2:
               System.out.println("You have selected Sky Team");
-              System.out.printf("Your total cost including tax is $%.2f",skyCost*1.13*passengers);
+              System.out.printf("Your total cost including tax is $%.2f",skyteamCost * 1.13);
+               cost = String.format("Your total cost including tax is $%.2f",starCost*1.13*passengers);
+              create.message("You have selected Sky Team "+ cost);
              break;
               case 3:
               System.out.println("You have selected One World");
               System.out.printf("Your total cost including tax is $%.2f",oneCost*1.13*passengers);
+              System.out.printf("Your total cost including tax is $%.2f",skyteamCost * 1.13);
+               cost = String.format("Your total cost including tax is $%.2f",starCost*1.13*passengers);
+              create.message("You have selected One World "+ cost);
              break;
          }
          //checks for valid input
+         
+         
          if (choice > 3 || choice < 1)
          {
-             System.out.println("You have not seleted a proper itenary, as such you get to restart the booking proccess :)");
+             create.message("You have not seleted a proper itenary, as such you get to restart the booking proccess :) as punishment");
+             
              check();
              return;
              
@@ -706,7 +750,7 @@ JAL.addDestination("Jedha");
          //exception ccatcher to deal with errors
            }catch(Exception e)
          {
-             System.out.println("Invalid input");
+             
              check();
              return;
          }
@@ -732,4 +776,3 @@ JAL.addDestination("Jedha");
     
   
 }
-
