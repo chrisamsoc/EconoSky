@@ -3,5 +3,4 @@ EconoSky is a Java-based flight booking simulator that models a wide network of 
  Factors taken into account include but are not limited to:
  time of booking, frequency of booking, holiday months, seat class.
  This program relies on djikstras algorithm to determine the cheapest possible flight combination from 3 alliances.
- 
- 
+ Program may be directly run from the econosky.jar file
